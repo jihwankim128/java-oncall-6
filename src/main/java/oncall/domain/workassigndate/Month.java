@@ -39,4 +39,7 @@ public enum Month {
         return day;
     }
 
+    public String getMonth() {
+        return month;
+    }
 }

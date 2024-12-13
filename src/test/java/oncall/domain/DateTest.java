@@ -34,7 +34,7 @@ class DateTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"일, 1", "월, 2", "화, 3", "수, 4", "목, 5", "금, 6", "토, 7"})
+    @CsvSource({"일, 0", "월, 1", "화, 2", "수, 3", "목, 4", "금, 5", "토, 6"})
     void 각_달의_날짜를_알_수_있다(String date, int sequence) {
         // given
         // when
@@ -42,6 +42,20 @@ class DateTest {
 
         // then
         assertThat(result.getSequence()).isEqualTo(sequence);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "SUNDAY, true", "MONDAY, false", "TUESDAY, false", "WEDNESDAY, false",
+            "THURSDAY, false", "FRIDAY, false", "SATURDAY, true"
+    })
+    void 주말인지_알_수_있다(Date date, boolean expected) {
+        // given
+        // when
+        boolean result = date.isWeekend();
+
+        // then
+        assertThat(result).isEqualTo(expected);
     }
 
 

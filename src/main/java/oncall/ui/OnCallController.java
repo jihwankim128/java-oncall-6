@@ -1,8 +1,10 @@
 package oncall.ui;
 
 import java.util.List;
+import oncall.application.OnCallResponse;
 import oncall.domain.OnCall;
 import oncall.domain.workassigndate.WorkAssignDate;
+import oncall.domain.workassigndate.WorkAssignDateInformation;
 import oncall.domain.worker.Workers;
 import oncall.ui.view.View;
 
@@ -14,6 +16,9 @@ public class OnCallController {
     public void run() {
         final WorkAssignDate workAssignDate = exceptionHandler.retry(this::generateWorkAssignDate);
         final OnCall workerOnCall = exceptionHandler.retry(this::generateWeekendsWorkers);
+        final WorkAssignDateInformation workAssignDateInformation = workAssignDate.extractWorkAssignDate();
+        final List<String> workerNames = workerOnCall.organizeSchedule(workAssignDateInformation.holidayInformation());
+        view.displayOnCallResult(OnCallResponse.of(workAssignDateInformation, workerNames));
     }
 
     private OnCall generateWeekendsWorkers() {

@@ -1,9 +1,9 @@
 package oncall.domain.worker;
 
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Stack;
 import oncall.exception.BadArgumentException;
 import oncall.exception.ExceptionMessage;
 
@@ -12,43 +12,53 @@ public class Workers {
     private static final int MIN_WORKERS_SIZE = 5;
     private static final int MAX_WORKERS_SIZE = 35;
 
-    private final Set<Worker> workers;
+    private final List<Worker> workers;
+    private final Stack<Worker> workersStack = new Stack<>();
+    private int idx = 0;
 
-    private Workers(final Set<Worker> workers) {
+    private Workers(final List<Worker> workers) {
         validateWorkersSize(workers);
         this.workers = workers;
     }
 
     public static Workers from(final List<String> workerNames) {
-        final Set<Worker> workers = new LinkedHashSet<>();
+        validateAlreadyIncludeWorkers(workerNames);
 
-        for (final String workerName : workerNames) {
-            final Worker worker = Worker.from(workerName);
-            validateAlreadyIncludeWorkers(workers, worker);
-            workers.add(worker);
-        }
-
-        return new Workers(workers);
+        return new Workers(workerNames.stream()
+                .map(Worker::from)
+                .toList());
     }
 
-    private static void validateAlreadyIncludeWorkers(final Set<Worker> workers, final Worker worker) {
-        if (workers.contains(worker)) {
+    private static void validateAlreadyIncludeWorkers(final List<String> workers) {
+        if (new HashSet<>(workers).size() != workers.size()) {
             throw new BadArgumentException(ExceptionMessage.INVALID_INPUT_DATA);
         }
     }
 
-    private void validateWorkersSize(final Set<Worker> workers) {
+    private void validateWorkersSize(final List<Worker> workers) {
         if (workers.size() < MIN_WORKERS_SIZE || workers.size() > MAX_WORKERS_SIZE) {
             throw new BadArgumentException(ExceptionMessage.INVALID_INPUT_DATA);
         }
     }
 
-    public Set<Worker> getWorkers() {
-        return Collections.unmodifiableSet(workers);
+    public List<Worker> getWorkers() {
+        return Collections.unmodifiableList(workers);
     }
 
     public boolean notContainsAll(final Workers holidayWorkers) {
-        return !workers.containsAll(holidayWorkers.workers);
+        return !new HashSet<>(workers).containsAll(holidayWorkers.workers);
+    }
+
+    public Worker getWorker() {
+        if (workersStack.empty()) {
+            return workers.get((idx++ % workers.size()));
+        }
+        return workersStack.pop();
+    }
+
+    public Worker getNextWorker(final Worker worker) {
+        workersStack.push(worker);
+        return workers.get((idx++ % workers.size()));
     }
 
 }
