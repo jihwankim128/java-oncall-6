@@ -1,4 +1,4 @@
-package oncall.domain;
+package oncall.domain.workassigndate;
 
 public class WorkAssignDate {
 

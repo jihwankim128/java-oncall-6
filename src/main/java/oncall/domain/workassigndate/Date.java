@@ -1,4 +1,4 @@
-package oncall.domain;
+package oncall.domain.workassigndate;
 
 import java.util.Arrays;
 import oncall.exception.BadArgumentException;

@@ -12,4 +12,9 @@ public class View extends OutputView {
         return prompt.parseInputData();
     }
 
+    public List<String> enterWorkOnWeekdays() {
+        displayWorkOnWeekdays();
+        return prompt.parseInputData();
+    }
+
 }
