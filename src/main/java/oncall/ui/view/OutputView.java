@@ -13,7 +13,10 @@ public class OutputView {
 
     public void displayErrorMessage(final String message) {
         System.out.println(message);
-        System.out.println();
+    }
+
+    protected void displayWorkAssignmentDate() {
+        System.out.print("비상 근무를 배정할 월과 시작 요일을 입력하세요> ");
     }
 
 }
