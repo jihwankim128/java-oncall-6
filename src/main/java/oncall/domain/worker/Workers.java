@@ -47,4 +47,8 @@ public class Workers {
         return Collections.unmodifiableSet(workers);
     }
 
+    public boolean notContainsAll(final Workers holidayWorkers) {
+        return !workers.containsAll(holidayWorkers.workers);
+    }
+
 }

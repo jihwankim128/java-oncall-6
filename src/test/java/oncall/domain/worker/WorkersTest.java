@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import oncall.domain.OnCall;
 import oncall.exception.ExceptionMessage;
 import org.junit.jupiter.api.Test;
 
@@ -81,4 +82,16 @@ class WorkersTest {
         assertThat(workers.getWorkers()).hasSize(workersSize);
     }
 
+    @Test
+    void 휴일근무자가_평일근무자에_포함되어있는지_알_수_있다() {
+        // given
+        Workers weekendsWorkers = Workers.from(List.of("근무자1", "근무자2", "근무자3", "근무자4", "근무자5"));
+        Workers holidayWorkers = Workers.from(List.of("근무자6", "근무자2", "근무자3", "근무자4", "근무자5"));
+
+        // when
+        boolean result = weekendsWorkers.notContainsAll(holidayWorkers);
+
+        // then
+        assertThat(result).isTrue();
+    }
 }

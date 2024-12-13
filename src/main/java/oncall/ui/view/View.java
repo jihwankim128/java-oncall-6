@@ -17,4 +17,9 @@ public class View extends OutputView {
         return prompt.parseInputData();
     }
 
+    public List<String> enterWorkOnHolidays() {
+        displayWorkOnHolidays();
+        return prompt.parseInputData();
+    }
+
 }
